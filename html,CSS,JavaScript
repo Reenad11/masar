@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مسار لتحسين سلسلة التوريد </title>
+    <style>
+        /* إعدادات عامة */
+        body {
+            font-family: "Tajawal", Arial, sans-serif;
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+
+        /* الرأس */
+        header {
+            background: linear-gradient(135deg, #1c1c1c, #2b2b2b);
+            color: #e0e0e0;
+            text-align: center;
+            padding: 2rem 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            letter-spacing: 1px;
+        }
+
+        /* الحاوية */
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 2rem auto;
+            background: #1e1e1e;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+        }
+
+        /* الأقسام */
+        .section {
+            margin-bottom: 2.5rem;
+        }
+
+        .section h2 {
+            color: #00BCD4;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #00BCD4;
+            padding-bottom: 0.5rem;
+        }
+
+        label {
+            font-weight: bold;
+            margin: 0.8rem 0 0.3rem;
+            display: block;
+            color: #b0b0b0;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 0.8rem;
+            margin: 0.5rem 0 1.2rem;
+            border: 1px solid #444;
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: #2c2c2c;
+            color: #e0e0e0;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            border-color: #00BCD4;
+            box-shadow: 0 0 8px rgba(0, 188, 212, 0.5);
+            outline: none;
+        }
+
+        button {
+            background-color: #00BCD4;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            padding: 0.8rem;
+            border-radius: 8px;
+        }
+
+        button:hover {
+            background-color: #0097a7;
+            transform: translateY(-3px);
+        }
+
+        .result {
+            margin-top: 1.2rem;
+            padding: 1rem;
+            background: #2a2a2a;
+            border-left: 5px solid #00BCD4;
+            border-radius: 8px;
+            color: #b0b0b0;
+        }
+
+        .result strong {
+            color: #00BCD4;
+        }
+
+        /* روابط وأيقونات */
+        footer {
+            text-align: center;
+            margin-top: 2.5rem;
+            font-size: 0.9rem;
+            color: #777;
+        }
+
+        /* نافذة منبثقة */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.7);
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-content {
+            background-color: #1e1e1e;
+            margin: 15% auto;
+            padding: 2rem;
+            border: 1px solid #333;
+            width: 80%;
+            max-width: 500px;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            
+            /* إضافة تأثير التكبير */
+            transform: scale(0.5);
+            animation: zoomIn 0.6s forwards;
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .close-btn {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .close-btn:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <!-- نافذة الترحيب المنبثقة -->
+    <div id="welcomeModal" class="modal">
+        <div class="modal-content">
+            <h2>مرحبًا بك في نظام تحسين سلاسل التوريد!</h2>
+            <p>نحن هنا لمساعدتك في إدارة وتحسين سلسلة التوريد الخاصة بك بكفاءة.</p>
+            <button class="close-btn" onclick="closeModal()">إغلاق</button>
+        </div>
+    </div>
+
+    <header>
+        <h1>مسار لتحسين سلسلة التوريد</h1>
+    </header>
+
+    <div class="container">
+        <!-- قسم جمع البيانات -->
+        <div class="section">
+            <h2>1. جمع البيانات</h2>
+            <label for="temperature">درجة الحرارة:</label>
+            <input type="number" id="temperature" placeholder="أدخل درجة الحرارة الحالية" min="-50" max="50">
+            
+            <label for="stock-level">مستوى المخزون (عدد الوحدات):</label>
+            <input type="number" id="stock-level" placeholder="أدخل عدد الوحدات في المخزون" min="0">
+
+            <label for="energy-consumption">استهلاك الطاقة (كيلووات):</label>
+            <input type="number" id="energy-consumption" placeholder="أدخل الاستهلاك الحالي للطاقة" min="0">
+
+            <button onclick="collectData()">جمع البيانات</button>
+        </div>
+
+        <!-- قسم تحليل البيانات -->
+        <div class="section">
+            <h2>2. تحليل البيانات باستخدام الذكاء الاصطناعي</h2>
+            <p>سيتم تحليل البيانات للتنبؤ بالاحتياجات المستقبلية بناءً على المعلومات المدخلة.</p>
+            <button onclick="analyzeData()">تحليل البيانات</button>
+            <div id="ai-result" class="result" style="display: none;">
+                <strong>نتائج التحليل:</strong>
+                <p id="ai-output"></p>
+            </div>
+        </div>
+
+        <!-- قسم الشفافية باستخدام البلوك تشين -->
+        <div class="section">
+            <h2>3. الشفافية باستخدام سلسلة الكتل</h2>
+            <label for="blockchain-input">أدخل معلومة جديدة للتسجيل في سلسلة الكتل:</label>
+            <input type="text" id="blockchain-input" placeholder="مثل: تسليم شحنة بتاريخ معين">
+            <button onclick="addToBlockchain()">إضافة إلى سلسلة الكتل</button>
+            <div id="blockchain-result" class="result" style="display: none;">
+                <strong>سجل سلسلة الكتل:</strong>
+                <ul id="blockchain-log" style="padding: 0; list-style: none;"></ul>
+            </div>
+        </div>
+
+        <!-- قسم تحسين التوريد -->
+        <div class="section">
+            <h2>4. كفاءة الطاقة والمخزون</h2>
+            <button onclick="optimizeSupply()">مستوى استهلاك الطاقة</button>
+            <div id="supply-result" class="result" style="display: none;">
+                <strong>نتيجة استهلاك:</strong>
+                <p id="supply-output"></p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2024 نظام ذكي لتحسين سلاسل التوريد. جميع الحقوق محفوظة.
+    </footer>
+
+    <script>
+        const blockchain = [];
+
+        // إظهار نافذة الترحيب عند التحميل
+        window.onload = function() {
+            document.getElementById('welcomeModal').style.display = 'block';
+        };
+
+        function closeModal() {
+            document.getElementById('welcomeModal').style.display = 'none';
+        }
+
+        function collectData() {
+            const temperature = document.getElementById('temperature').value;
+            const stockLevel = document.getElementById('stock-level').value;
+            const energyConsumption = document.getElementById('energy-consumption').value;
+
+            if (!temperature || !stockLevel || !energyConsumption) {
+                alert("يرجى ملء جميع الحقول لجمع البيانات.");
+                return;
+            }
+
+            alert("تم جمع البيانات بنجاح!");
+        }
+
+        function analyzeData() {
+            const stockLevel = parseInt(document.getElementById('stock-level').value || 0);
+            const prediction = stockLevel * 1.2; // افتراض زيادة الطلب بنسبة 20%
+            document.getElementById('ai-output').innerText = `الطلب المتوقع: ${Math.round(prediction)} وحدة.`;
+            document.getElementById('ai-result').style.display = 'block';
+        }
+
+        function addToBlockchain() {
+            const newEntry = document.getElementById('blockchain-input').value;
+
+            if (!newEntry) {
+                alert("يرجى إدخال معلومة لتسجيلها.");
+                return;
+            }
+
+            const timestamp = new Date().toLocaleString();
+            const entryWithTimestamp = `${timestamp} - ${newEntry}`;
+            blockchain.push(entryWithTimestamp);
+
+            const log = document.getElementById('blockchain-log');
+            const listItem = document.createElement('li');
+            listItem.textContent = entryWithTimestamp;
+            listItem.style.padding = "0.5rem 0";
+            log.appendChild(listItem);
+
+            document.getElementById('blockchain-result').style.display = 'block';
+        }
+
+        function optimizeSupply() {
+            const energyConsumption = parseInt(document.getElementById('energy-consumption').value || 0);
+            let optimization = "";
+
+            // إضافة تحليل متعدد الجوانب
+            if (energyConsumption > 800) {
+                optimization += "استهلاك الطاقة مرتفع. يُوصى بخفض الاستهلاك. ";
+            } else if (energyConsumption > 500) {
+                optimization += "استهلاك الطاقة متوسط. يُوصى بتحسين كفاءة الطاقة. ";
+            } else {
+                optimization += "استهلاك الطاقة ضمن المستوى الطبيعي. ";
+            }
+
+            // إضافة تحليل بناءً على مستويات المخزون
+            const stockLevel = parseInt(document.getElementById('stock-level').value || 0);
+            if (stockLevel < 100) {
+                optimization += "المخزون منخفض. يُوصى بإعادة الطلب قريبًا.";
+            } else if (stockLevel > 500) {
+                optimization += "المخزون مرتفع. يُوصى بمراجعة مبيعات الفترة القادمة.";
+            }
+
+            document.getElementById('supply-output').innerText = optimization;
+            document.getElementById('supply-result').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
